@@ -1,0 +1,23 @@
+OTSD-SVX Ver 1.32
+(OTSD-SVX Ver 1.31.07 2018.03.07)
+-------------------------------------------------
+Ver 1.07  2016.05.30  /etc/init.d/rcS
+Ver 1.00  2014.02.27  /home/miharu/checkMhnmd.sh
+Ver 1.05  2011.05.23  /home/miharu/mhnmcgi.cgi
+Ver 1.98  2018.01.10  /home/miharu/mhnmd *
+Ver 1.00  2016.01.27  /home/miharu/mhterm
+Ver 1.06  2016.05.26  /home/miharu/residentMhnmd.sh
+Ver 1.00  2009.05.26  /home/miharu/ti_cha.sh
+Ver 1.00  2018.02.21  /home/www/favicon.ico *
+Ver 1.00  2004.07.21  /home/www/index.html
+Ver 1.00  2009.05.13  /home/www/mhmain.html
+Ver 1.00  2011.02.04  /home/www/tmpl/slot.html
+Ver 1.30  2018.03.07  /home/www/mhmain.swf *
+Ver 1.90  2018.03.07  /home/www/mhunitstat.swf *
+Ver 1.08  2017.02.27  /home/www/f_info.swf
+Ver 1.00  2010.12.06  /home/www/manual.pdf
+Ver 1.01  2011.06.23  /lib/modules/smc91111.o
+Ver 1.01  2016.05.26  /usr/sbin/residentSnmpd.sh
+Ver 1.75  2017.12.13  /usr/sbin/snmpd *
+Ver 1.81  2017.02.28  /usr/sbin/twsetup
+-------------------------------------------------
