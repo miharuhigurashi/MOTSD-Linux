@@ -1,0 +1,120 @@
+#!/bin/sh
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+#TZ=JST
+#export TZ
+
+mount -a
+
+echo TW-Linux: creating RAM disk for /var and /tmp 
+mount -t tmpfs -o size=6m /dev/shm /var
+mount -t tmpfs -o size=6m /dev/shm /tmp
+mkdir /var/www /var/run /var/lock /var/log
+mkdir /var/update
+chmod a+w /tmp
+chmod a+w /var/run
+chmod a+w /var/log
+chmod a+w /var/update
+
+#Check Update 
+/usr/sbin/update
+
+for fl in `ls -1 /home/www`
+do
+if [ $fl != 'index.html' ]
+then
+ln -s /home/www/$fl /var/www/$fl
+fi
+done
+
+#for telnetd
+mkdir /var/dev
+
+for USER in 0 1 2
+do
+        mknod /var/dev/ptyp$USER c 2 $USER
+        mknod /var/dev/ttyp$USER c 3 $USER
+done
+
+
+#Setup Host Name
+echo TW-Linux: Set Host Name
+if [ -f /etc/hostname ]
+then
+ /bin/hostname `cat /etc/hostname` 
+else
+ /bin/hostname SV
+fi
+
+#
+# setup network interface
+#
+
+
+echo TW-Linux: Set IP ADDRESS
+#Loopback I/F
+ifconfig lo 127.0.0.1
+#Init NIC
+#PROCDIR=/proc/sys/dev/eth0
+ifconfig lo 127.0.0.1 netmask 255.0.0.0
+
+insmod /lib/moudules/smc91111.o io=0xb8000000 irq=32 nowait=1
+
+usleep 200
+
+if [ -f /etc/ipsetup ] 
+then
+ ifconfig eth0 0.0.0.0
+ ifconfig eth0 `cat /etc/ipsetup`
+else
+ ifconfig eth0 0.0.0.0
+ enable
+ /sbin/udhcpc -b -i eth0 -s /etc/dhcpc.sh 
+ disable
+fi
+
+echo TW-Linux: Set Default Gateway
+if [ -f /etc/defgw ]
+then
+ route add default gw `cat /etc/defgw`
+fi
+
+#echo TW-Linux:Start NTP Client...
+#twntpcd /etc/ntpserver
+sleep 1
+
+/home/miharu/ti_cha.sh
+
+echo TW-Linux: Start telnetd...
+/usr/sbin/telnetd
+
+echo TW-Linux: Start inetd...
+/usr/sbin/inetd
+
+usleep 500
+echo TW-Linux: Start httpd...
+/usr/sbin/httpd -f /etc/httpd.conf
+
+usleep 500
+#echo TW-Linux:Start snmpd
+#/usr/sbin/snmpd -c /etc/snmpd.conf
+#usleep 2000
+echo Start Miharu SH3BD Driver and Deamon
+insmod  /lib/modules/adin.o
+insmod  /lib/modules/gpio.o
+insmod  /lib/modules/dipsw.o
+usleep 200
+
+echo TW-Linux:Start snmpd...
+#/usr/sbin/snmpd -c /etc/snmpd.conf
+/usr/sbin/residentSnmpd.sh &
+usleep 10000
+
+echo TW-Linux:Start mhnmd...
+#/home/miharu/mhnmd /dev/ttySC0 /var/www/
+/home/miharu/residentMhnmd.sh &
+sleep 1
+echo 1 > /dev/gpio26
+
+sleep 3
+exit 0

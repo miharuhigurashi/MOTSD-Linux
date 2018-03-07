@@ -1,0 +1,9 @@
+rootfs / rootfs rw 0 0
+none /sys sysfs rw,nosuid,nodev,noexec 0 0
+none /proc proc rw,nosuid,nodev,noexec 0 0
+udev /dev tmpfs rw,size=10240k,mode=755 0 0
+/dev/sda1 / ext3 rw,errors=remount-ro,data=ordered 0 0
+tmpfs /lib/init/rw tmpfs rw,nosuid,mode=755 0 0
+usbfs /proc/bus/usb usbfs rw,nosuid,nodev,noexec 0 0
+tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0
+devpts /dev/pts devpts rw,nosuid,noexec,gid=5,mode=620 0 0
